@@ -103,6 +103,7 @@ return amplitude*wave2+amplitude*wave;
 void main() {	
 	
 	vec4 tex = vec4((watercolor*length(texture2D(texture, texcoord.xy).rgb*color.rgb)*color).rgb,watercolor.a);
+	//iswater <0.1 kein Wasser
 	if (iswater < 0.1)  tex = texture2D(texture, texcoord.xy)*color;
 	
 	vec3 posxz = wpos.xyz;
@@ -125,6 +126,8 @@ void main() {
 	vec4 frag2;
 		frag2 = vec4((normal) * 0.5f + 0.5f, 1.0f);		
 		
+		
+	//iswater>0.9 für die Überprüfung ob das element wasser ist  
 	if (iswater > 0.9) {
 		vec3 bump = newnormal;
 			bump = bump;

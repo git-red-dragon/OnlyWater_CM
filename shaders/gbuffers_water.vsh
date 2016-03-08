@@ -49,13 +49,14 @@ const float PI = 3.1415927;//pi
 void main() {
 	
 	//vec4 viewpos = gl_ModelViewMatrix * gl_Vertex;
+	//positionierung das Objets im raum an die richtige stelle
 	vec4 position = gl_ModelViewMatrix * gl_Vertex;
 	iswater = 0.0f;
 	float displacement = 0.0;
 	
 	/* un-rotate */
 	vec4 viewpos = gbufferModelViewInverse * position;
-
+//Translation der Camerapositon
 	vec3 worldpos = viewpos.xyz + cameraPosition;
 	wpos = worldpos;
 	

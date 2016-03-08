@@ -147,24 +147,6 @@ void main() {
 		vec2 refractcoord_g = texcoord.st;
 		vec2 refractcoord_b = texcoord.st;
 	
-		for (int i = 0; i < 1; ++i) {
-			refractcoord_r = texcoord.st * (1.0f + waves*refractamount3) - (waves*refractamount3/2.0f) + vec2( waves*refractamount2 + (-wnormal_x*0.4f) - bigRefract.x,  waves*refractamount2 + (-wnormal_y*0.4f) - bigRefract.y) * (waberration * 2.0f + 1.0f);
-			refractcoord_r = refractcoord_r * vec2(1.0f - abs(wnormal_x) * bigWaveRefractScale, 1.0f - abs(wnormal_y) * bigWaveRefractScale) + vec2(abs(wnormal_x) * bigWaveRefractScale * 0.5f, abs(wnormal_y) * bigWaveRefractScale * 0.5f);
-
-			refractcoord_r.s = clamp(refractcoord_r.s, 0.001f, 0.999f);
-			refractcoord_r.t = clamp(refractcoord_r.t, 0.001f, 0.999f);	
-			
-			if (refractcoord_r.s > 1.0 || refractcoord_r.s < 0.0 || refractcoord_r.t > 1.0 || refractcoord_r.t < 0.0) {
-				break;
-			}
-
-			refracted.rgb = texture2D(gcolor, refractcoord_r).rgb;
-
-			refractedmask = texture2D(gaux1, refractcoord_r).g;
-			if(refractedmask > 0.01 && refractedmask < 0.07) {
-				refractedmask = 1.0;
-			}else refractedmask = 0.0;
-		}
 		
 		color.rgb = mix(color.rgb, refracted.rgb, vec3(refractedmask));	
 		
