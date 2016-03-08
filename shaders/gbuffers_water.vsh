@@ -62,9 +62,7 @@ void main() {
 	
 
 
-//MC_entity ist die abfrage ob mc_Entity.x ==9 ist der wert der einen wasser block realisiert
-	//mc_Entity.x == 2.0 || aus abfrage entfernt
-	if( mc_Entity.x == 9.0) {
+
 		iswater = 1.0;
 		float fy = fract(worldpos.y + 0.1);
 		
@@ -76,7 +74,7 @@ void main() {
 		displacement = clamp(wave, -fy, 1.0-fy);
 		viewpos.y += displacement*0.5;
 #endif
-	}
+
 	
 	/* re-rotate */
 	viewpos = gbufferModelView * viewpos;
