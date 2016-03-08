@@ -117,7 +117,7 @@ void main() {
     vec3 normal = texture2D(gnormal, texcoord.st).rgb * 2.0 - 1.0;
 	color.rgb *= mix(vec3(1.0),vec3(1.0,1.0,1.0),isEyeInWater);
     
-	if (iswater > 0.9 && isEyeInWater == 0) {
+	if (iswater > 0.9 && isEyeInWater == 0|| isEyeInWater == 1) {
 		vec4 reflection = raytrace(fragpos, normalize(normal+wave*0.02));
 		float normalDotEye = dot(normalize(normal+wave*0.15), -normalize(fragpos));
 		float fresnel = 1.0 - normalDotEye;
@@ -125,14 +125,6 @@ void main() {
 		color.rgb = mix(color.rgb, reflection.rgb, fresnel*reflection.a * (vec3(1.0) - color.rgb) * (1.0-isEyeInWater));
     }
 	
-	if (iswater > 0.9 && isEyeInWater == 1) {
-		vec4 reflection = raytrace(fragpos, normalize(normal+wave*0.02));
-		float normalDotEye = dot(normalize(normal+wave*0.15), -normalize(fragpos));
-		float fresnel = 1.0 - normalDotEye;
-
-		color.rgb = mix(color.rgb, reflection.rgb, fresnel*reflection.a * (vec3(1.0) - color.rgb) * (1.0-isEyeInWater));
-    }
-
 	#ifdef DEPTH_OF_FIELD
 		float depth = getDepth(texcoord.st);
 		float cursorDepth = getDepth(vec2(0.5, 0.5));
