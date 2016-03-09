@@ -134,7 +134,7 @@ void main() {
 			
 		
 		float bumpmult = 0.05;	
-		
+		//shading Wasser
 		bump = bump * vec3(bumpmult, bumpmult, bumpmult) + vec3(0.0f, 0.0f, 1.0f - bumpmult);
 		mat3 tbnMatrix = mat3(tangent.x, binormal.x, normal.x,
 							tangent.y, binormal.y, normal.y,

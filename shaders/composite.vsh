@@ -9,6 +9,7 @@
 //------------------------------------
 
 varying vec4 texcoord;
+varying float iswater;
 
 void main() {
 	gl_Position = ftransform();
