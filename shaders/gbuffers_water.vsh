@@ -68,8 +68,7 @@ void main() {
 #ifdef WAVING_WATER
 //					Faktor für die Wellenhöhe
 //		float wave = 0.05 * sin(2 * PI * (frameTimeCounter*0.75 + worldpos.x /  7.0 + worldpos.z / 13.0))   + 0.05 * sin(2 * PI * (frameTimeCounter*0.6 + worldpos.x / 11.0 + worldpos.z /  5.0));
-		
-		
+				
 		float amplitude=0.5;
 		
 		float wavelength1 =(frameTimeCounter*0.75 + worldpos.x /  7.0 + worldpos.z / 13.0);
@@ -78,13 +77,12 @@ void main() {
 		float frequencywave1 = sin(2 * PI * wavelength1);
 		float frequencywave2 = sin(2 * PI * wavelength2);
 				
-		float wave = amplitude * frequencywave1
-				   + amplitude * frequencywave2;
+		float wave = amplitude * frequencywave1 + amplitude * frequencywave2;
 		
 		
 	//	float wave = 0.05 * sin(2 * PI * (frameTimeCounter*0.75 + worldpos.x /  7.0 + worldpos.z / 13.0))
 	//			   + 0.05 * sin(2 * PI * (frameTimeCounter*0.6 + worldpos.x / 11.0 + worldpos.z /  5.0));
-		displacement = clamp(wave, -fy, 1.0-fy);
+		displacement = clamp(wave, -fy, 1.0-fy); //Clamp um nur die wellen zwischen fy und 1-fy zu zeigen die auch sichtbar sind
 		viewpos.y += displacement*0.5;
 #endif
 
@@ -142,8 +140,6 @@ void main() {
 		//  0.0,  0.0, -1.0
 		tangent  = normalize(gl_NormalMatrix * vec3(-1.0,  0.0,  0.0));
 		binormal = normalize(gl_NormalMatrix * vec3( 0.0, -1.0,  0.0));
-	}
+	}	
 	
-	
-
 }

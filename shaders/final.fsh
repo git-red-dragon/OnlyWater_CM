@@ -7,7 +7,6 @@
 //You can use my code for what ever you want,
 //but don't forget to give credits! :)
 //------------------------------------
-
 //Add or remove the two "//" in front of "#define" to enable or disable the effect!
 
 //#define DEPTH_OF_FIELD
@@ -34,15 +33,7 @@ const float ref = 0.1;			//refinement multiplier
 const float inc = 2.2;			//increasement factor at each step
 const int maxf = 4;				//number of refinements
 
-#ifdef DEPTH_OF_FIELD
-	const float HYPERFOCAL = 3.132;
-	const float PICONSTANT = 3.14159;
-	vec4 getBlurredColor();
-	vec4 getSample(vec2 coord, vec2 aspectCorrection);
-	vec4 getSampleWithBoundsCheck(vec2 offset);
-	float samples = 0.0;
-	vec2 space;
-#endif
+
 
 float getDepth(vec2 coord) {
     return 2.0 * near * far / (far + near - (2.0 * texture2D(depthtex0, coord).x - 1.0) * (far - near));
@@ -125,35 +116,6 @@ void main() {
 		color.rgb = mix(color.rgb, reflection.rgb, fresnel*reflection.a * (vec3(1.0) - color.rgb) * (1.0-isEyeInWater));
     }
 	
-	#ifdef DEPTH_OF_FIELD
-		float depth = getDepth(texcoord.st);
-		float cursorDepth = getDepth(vec2(0.5, 0.5));
-		float mixAmount = 0.0;
-	
-		if (depth < cursorDepth) {
-			mixAmount = clamp(2.0 * ((clamp(cursorDepth, 0.0, HYPERFOCAL) - depth) / (clamp(cursorDepth, 0.0, HYPERFOCAL))), 0.0, 1.0);
-		} else if (cursorDepth == HYPERFOCAL) {
-			mixAmount = 0.0;
-		} else {
-			mixAmount =  1.0 - clamp((((cursorDepth * HYPERFOCAL) / (HYPERFOCAL - cursorDepth)) - (depth - cursorDepth)) / ((cursorDepth * HYPERFOCAL) / (HYPERFOCAL - cursorDepth)), 0.0, 1.0);
-		}
-    
-		if (mixAmount != 0.0) {
-		vec4 blurredColor = vec4(0.0)
-			color.rgb = mix(color.rgb, getBlurredColor.rgb, mixAmount);
-			
-			
-			/*
-			if (iswater > 0.9) {
-				vec4 reflection = raytrace(fragpos, normalize(normal+wave*0.02));
-				float normalDotEye = dot(normalize(normal+wave*0.15), -normalize(fragpos));
-				float fresnel = 1.0 - normalDotEye;
-
-				color.rgb = (mix(color.rgb, reflection.rgb, fresnel*reflection.a * (vec3(1.0) - color.rgb) * (1.0-isEyeInWater)) + mix(color.rgb, getBlurredColor().rgb, mixAmount))/2;
-				//color.rgb = mix(color.rgb, reflection.rgb, fresnel*reflection.a * (vec3(1.0) - color.rgb) * (1.0-isEyeInWater));
-			}*/
-		}
-	#endif
 	
 	gl_FragColor = vec4(color.rgb, 0.0);
 }

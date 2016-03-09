@@ -149,8 +149,9 @@ void main() {
 							tangent.z, binormal.z, normal.z);
 		
 		frag2 = vec4(normalize(bump * tbnMatrix) * 0.5 + 0.5, 1.0);
-	}
-	gl_FragData[0] = tex;
+
+		}
+	gl_FragData[0] = tex;//(muss immer ein vec4 sein)//newnormal;//vec4(newnormal,1);
 	gl_FragData[1] = frag2;	
 	gl_FragData[2] = vec4(lmcoord.t, mix(1.0,0.05,iswater), lmcoord.s, 1.0);
 }
