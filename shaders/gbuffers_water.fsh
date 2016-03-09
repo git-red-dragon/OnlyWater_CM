@@ -71,12 +71,13 @@ float waterH(vec3 posxz) {
 
 	//längenbestimmung von fpx und fpy
 	float d = length(vec2(fpx,fpy));
+
 	
-	float S = (1/factor)*px*py*size + 1.0*frameTimeCounter*speed;
+	//float S = (1/factor)*px*py*size + 1.0*frameTimeCounter*speed;
+		float S = binormal.x*binormal.y*px*py*size + 1.0*frameTimeCounter*speed;
 	for (int i = 1; i < 4; i++) {
-	
-	
-		wave -= d*factor*cos(S);
+		wave -= binormal.x*d*factor*cos(S);
+	//	wave -= d*factor*cos(S);
 		factor /= 2;
 	}
 
@@ -92,7 +93,7 @@ float waterH(vec3 posxz) {
 	float wave2 = 0.0;
 	for (int i = 1; i < 4; i++) {
 
-		wave2 -= d*factor*cos(S);
+		wave2 -= binormal.y*d*factor*cos(S);
 		factor /= 2;
 	}
 

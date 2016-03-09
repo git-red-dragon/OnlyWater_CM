@@ -70,16 +70,16 @@ void main() {
 //		float wave = 0.05 * sin(2 * PI * (frameTimeCounter*0.75 + worldpos.x /  7.0 + worldpos.z / 13.0))   + 0.05 * sin(2 * PI * (frameTimeCounter*0.6 + worldpos.x / 11.0 + worldpos.z /  5.0));
 		
 		
-		float geschwindikeit=0.05;
+		float amplitude=0.5;
 		
 		float wavelength1 =(frameTimeCounter*0.75 + worldpos.x /  7.0 + worldpos.z / 13.0);
 		float wavelength2 =(frameTimeCounter*0.6 + worldpos.x / 11.0 + worldpos.z /  5.0);
 		
 		float frequencywave1 = sin(2 * PI * wavelength1);
 		float frequencywave2 = sin(2 * PI * wavelength2);
-		
-		float wave = geschwindikeit * frequencywave1
-				   + geschwindikeit * frequencywave2;
+				
+		float wave = amplitude * frequencywave1
+				   + amplitude * frequencywave2;
 		
 		
 	//	float wave = 0.05 * sin(2 * PI * (frameTimeCounter*0.75 + worldpos.x /  7.0 + worldpos.z / 13.0))
