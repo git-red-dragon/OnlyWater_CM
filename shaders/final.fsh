@@ -158,10 +158,11 @@ void main() {
 }
 
 #ifdef DEPTH_OF_FIELD
+//Weichzeichnen
 vec4 getBlurredColor() {
 	vec4 blurredColor = vec4(0.0);
 	float depth = getDepth(texcoord.st);
-	vec2 aspectCorrection = vec2(1.0, aspectRatio) * 0.005;
+	vec2 aspectCorrection = vec2(1.0, aspectRatio) * 0.005;// aspectRation wird von ausen gesetzt
 
 	vec2 ac0_4 = BLUR_AMOUNT * 0.4 * aspectCorrection;	// 0.4
 	vec2 ac0_4x0_4 = 0.4 * ac0_4;			// 0.16

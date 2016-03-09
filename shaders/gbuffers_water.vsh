@@ -50,15 +50,16 @@ void main() {
 	
 	//vec4 viewpos = gl_ModelViewMatrix * gl_Vertex;
 	//positionierung das Objets im raum an die richtige stelle
-	vec4 position = gl_ModelViewMatrix * gl_Vertex;
+	vec4 position = gl_ModelViewMatrix * gl_Vertex; 
 	//iswater = 0.0f;
 	float displacement = 0.0;
 	
 	/* un-rotate */
 	vec4 viewpos = gbufferModelViewInverse * position;
-//Translation der Camerapositon
+//viewpos  ist position im viewspase
+	//Translation der Camerapositon
 	vec3 worldpos = viewpos.xyz + cameraPosition;
-	wpos = worldpos;
+	wpos = worldpos; //ÜBergabe der Worldpos an den fsh
 	
 
 		iswater = 1.0f;
@@ -69,7 +70,7 @@ void main() {
 //		float wave = 0.05 * sin(2 * PI * (frameTimeCounter*0.75 + worldpos.x /  7.0 + worldpos.z / 13.0))   + 0.05 * sin(2 * PI * (frameTimeCounter*0.6 + worldpos.x / 11.0 + worldpos.z /  5.0));
 		
 		
-		float geschwindikeit=0.05; // Der Welle
+		float geschwindikeit=0.05;
 		
 		float wavelength1 =(frameTimeCounter*0.75 + worldpos.x /  7.0 + worldpos.z / 13.0);
 		float wavelength2 =(frameTimeCounter*0.6 + worldpos.x / 11.0 + worldpos.z /  5.0);
@@ -77,8 +78,8 @@ void main() {
 		float frequencywave1 = sin(2 * PI * wavelength1);
 		float frequencywave2 = sin(2 * PI * wavelength2);
 		
-		float wave = geschwindikeit * frequencywave1 + geschwindikeit * frequencywave2;
-
+		float wave = geschwindikeit * frequencywave1
+				   + geschwindikeit * frequencywave2;
 		
 		
 	//	float wave = 0.05 * sin(2 * PI * (frameTimeCounter*0.75 + worldpos.x /  7.0 + worldpos.z / 13.0))
@@ -92,18 +93,19 @@ void main() {
 	viewpos = gbufferModelView * viewpos;
 
 	/* projectify */
-	gl_Position = gl_ProjectionMatrix * viewpos;
+	gl_Position = gl_ProjectionMatrix * viewpos; //gl_Position ist wichtiger bestantteil von GLSL
 	
 	color = gl_Color;
 	
-	texcoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).st;
+	texcoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).st; 
 
 	lmcoord = (gl_TextureMatrix[1] * gl_MultiTexCoord1).st;
 	
-	gl_FogFragCoord = gl_Position.z;
-	
-	tangent = vec3(0.0);
-	binormal = vec3(0.0);
+
+	//Surface Normals	
+	tangent = vec3(0.0);//beliebige richtung
+	binormal = vec3(0.0);// unter dem Vertexs 
+
 	normal = normalize(gl_NormalMatrix * normalize(gl_Normal));
 
 	if (gl_Normal.x > 0.5) {

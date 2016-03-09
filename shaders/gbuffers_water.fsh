@@ -14,7 +14,7 @@ Read the terms of modification and sharing before changing something below pleas
 	float RED = 0.0; //Redamount (0 - 255)
 	float GREEN = 100.0; //Greenamount (0 - 255)
 	float BLUE = 200.0; //Blueamount (0 - 255)
-	float OPACITY = 65.0; //Opacity (0 - 100)
+	float OPACITY = 65.0;//65.0; //Opacity (0 - 100)
 
 	//#define MIX_TEX	0.7
 	vec4 watercolor = vec4(RED/1000, GREEN/1000, BLUE/1000, OPACITY/100);
@@ -56,42 +56,47 @@ return sin(2 * PI * (n));
 
 float waterH(vec3 posxz) {
 
-float wave = 0.0;
+	float wave = 0.0;
+	float factor = 2.0;
+	float amplitude = 0.2;
+	float speed = 4.0;
+	float size = 0.2;
 
+	float px = posxz.x/50.0 + 250.0;
+	float py = posxz.z/50.0  + 250.0;
 
-float factor = 2.0;
-float amplitude = 0.2;
-float speed = 4.0;
-float size = 0.2;
+	//zerlegung in kleine Fractale
+	float fpx = abs(fract(px*20.0)-0.5)*2.0;
+	float fpy = abs(fract(py*20.0)-0.5)*2.0;
 
-float px = posxz.x/50.0 + 250.0;
-float py = posxz.z/50.0  + 250.0;
+	//längenbestimmung von fpx und fpy
+	float d = length(vec2(fpx,fpy));
+	
+	float S = (1/factor)*px*py*size + 1.0*frameTimeCounter*speed;
+	for (int i = 1; i < 4; i++) {
+	
+	
+		wave -= d*factor*cos(S);
+		factor /= 2;
+	}
 
-float fpx = abs(fract(px*20.0)-0.5)*2.0;
-float fpy = abs(fract(py*20.0)-0.5)*2.0;
+	factor = 1.0;
+	px = -posxz.x/50.0 + 250.0;
+	py = -posxz.z/150.0 - 250.0;
 
-float d = length(vec2(fpx,fpy));
+	//abs für nur positive Werte
+	fpx = abs(fract(px*20.0)-0.5)*2.0;
+	fpy = abs(fract(py*20.0)-0.5)*2.0;
 
-for (int i = 1; i < 4; i++) {
-	wave -= d*factor*cos( (1/factor)*px*py*size + 1.0*frameTimeCounter*speed);
-	factor /= 2;
-}
+	d = length(vec2(fpx,fpy));
+	float wave2 = 0.0;
+	for (int i = 1; i < 4; i++) {
 
-factor = 1.0;
-px = -posxz.x/50.0 + 250.0;
-py = -posxz.z/150.0 - 250.0;
+		wave2 -= d*factor*cos(S);
+		factor /= 2;
+	}
 
-fpx = abs(fract(px*20.0)-0.5)*2.0;
-fpy = abs(fract(py*20.0)-0.5)*2.0;
-
-d = length(vec2(fpx,fpy));
-float wave2 = 0.0;
-for (int i = 1; i < 4; i++) {
-	wave2 -= d*factor*cos( (1/factor)*px*py*size + 1.0*frameTimeCounter*speed);
-	factor /= 2;
-}
-
-return amplitude*wave2+amplitude*wave;
+	return amplitude*wave2+amplitude*wave;
 }
 
 //////////////////////////////VOID MAIN//////////////////////////////
@@ -103,10 +108,10 @@ return amplitude*wave2+amplitude*wave;
 void main() {	
 	
 	vec4 tex = vec4((watercolor*length(texture2D(texture, texcoord.xy).rgb*color.rgb)*color).rgb,watercolor.a);
-	//iswater <0.1 kein Wasser
+	//iswater <0.1 kein Wasser dann wird das die normale farbe genommen
 	if (iswater < 0.1)  tex = texture2D(texture, texcoord.xy)*color;
 	
-	vec3 posxz = wpos.xyz;
+	vec3 posxz = wpos.xyz; //Weltposition 
 
 	posxz.x += sin(posxz.z+frameTimeCounter)*0.25;
 	posxz.z += cos(posxz.x+frameTimeCounter*0.5)*0.25;
@@ -127,6 +132,7 @@ void main() {
 		frag2 = vec4((normal) * 0.5f + 0.5f, 1.0f);		
 		
 		
+		//Bump filter
 	//iswater>0.9 für die Überprüfung ob das element wasser ist  
 	if (iswater > 0.9) {
 		vec3 bump = newnormal;
@@ -136,6 +142,7 @@ void main() {
 		float bumpmult = 0.05;	
 		//shading Wasser
 		bump = bump * vec3(bumpmult, bumpmult, bumpmult) + vec3(0.0f, 0.0f, 1.0f - bumpmult);
+		//binormal sind die Binormalen des Wassers aus dem Water Vragmentshalder
 		mat3 tbnMatrix = mat3(tangent.x, binormal.x, normal.x,
 							tangent.y, binormal.y, normal.y,
 							tangent.z, binormal.z, normal.z);

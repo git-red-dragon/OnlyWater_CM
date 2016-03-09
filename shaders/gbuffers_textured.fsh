@@ -26,6 +26,7 @@ void main() {
 	gl_FragDepth = gl_FragCoord.z;
 
 	//x = specularity / y = land(0.0/1.0)/shadow early exit(0.2)/water(0.05) / z = torch lightmap
-	gl_FragData[4] = vec4(0.0, 0.0, 0.0, 1.0);
+	//gl_FragData[4] uninteresant
+	//gl_FragData[4] = vec4(0.0, 0.0, 0.0, 1.0);
 
 }

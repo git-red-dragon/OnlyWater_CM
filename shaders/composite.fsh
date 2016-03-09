@@ -43,6 +43,7 @@ float callwaves(vec2 pos) {
 	float wsize = 2.9;
 	float wspeed = 0.025f;
 
+	//worldTime übergeben von ausen
 	float rs0 = abs(sin((worldTime*wspeed/5.0) + (pos.s*wsize) * 20.0)+0.2);
 	float rs1 = abs(sin((worldTime*wspeed/7.0) + (pos.t*wsize) * 27.0));
 	float rs2 = abs(sin((worldTime*wspeed/2.0) + (pos.t*wsize) * 60.0 - sin(pos.s*wsize) * 13.0)+0.4);
@@ -92,12 +93,11 @@ void main() {
 	float wave = 0.0;
 	if (iswater > 0.9) {
 		wave = callwaves(worldposition.xz*0.02)*2.0-1.0;
-		wave = wave;
-
+	
 		const float wnormalclamp = 0.05f;
 
 		float rdepth = pixeldepth;
-		float waves = wave;
+
 		float wnormal_x1 = texture2D(depthtex0, texcoord.st + vec2(pw, 0.0f)).x - texture2D(depthtex0, texcoord.st).x;
 		float wnormal_x2 = texture2D(depthtex0, texcoord.st).x - texture2D(depthtex0, texcoord.st + vec2(-pw, 0.0f)).x;			
 		float wnormal_x = 0.0f;
