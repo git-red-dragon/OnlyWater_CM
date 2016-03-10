@@ -4,7 +4,6 @@ varying vec4 texcoord;
 varying float iswater;
 
 void main() {
-	gl_Position = ftransform();
-	
+	gl_Position = ftransform();	
 	texcoord = gl_MultiTexCoord0;
 }

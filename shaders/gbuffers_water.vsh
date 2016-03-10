@@ -33,6 +33,9 @@ uniform int isEyeInWater;
 
 const float PI = 3.1415927;//pi
 
+
+
+
 //////////////////////////////VOID MAIN//////////////////////////////
 //////////////////////////////VOID MAIN//////////////////////////////
 //////////////////////////////VOID MAIN//////////////////////////////
@@ -40,25 +43,19 @@ const float PI = 3.1415927;//pi
 //////////////////////////////VOID MAIN//////////////////////////////
 
 void main() {
-	
-	//vec4 viewpos = gl_ModelViewMatrix * gl_Vertex;
 	//positionierung das Objets im raum an die richtige stelle
-	//vec4 position = gl_ModelViewMatrix * gl_Vertex; 
 	vec4 vertexEyeSpace = gl_ModelViewMatrix * gl_Vertex;//verschiebung in den View Eye
-	//iswater = 0.0f;
 	float displacement = 0.0;
 	
-	/* un-rotate */
+	// un-rotate */
 	vec4 viewpos = gbufferModelViewInverse * vertexEyeSpace; //wieder zurpck setzen  ohne das schwebt das wasser
 
 //viewpos  ist position im viewspase
-	//Translation der Camerapositon
 	vec3 worldpos = viewpos.xyz; 
 	wpos = worldpos; //ÜBergabe der Worldpos an den fsh
 	iswater = 1.0f;
 	float fy = fract(worldpos.y + 0.1);
 		
-#ifdef WAVING_WATER
 //					Faktor für die Wellenhöhe
 //		float wave = 0.05 * sin(2 * PI * (frameTimeCounter*0.75 + worldpos.x /  7.0 + worldpos.z / 13.0))   + 0.05 * sin(2 * PI * (frameTimeCounter*0.6 + worldpos.x / 11.0 + worldpos.z /  5.0));
 				
@@ -67,7 +64,6 @@ void main() {
 		float wavelength1 =(frameTimeCounter*0.75 + worldpos.x /  7.0 + worldpos.z / 13.0); //sorgt dafür das sich die welle bewegt
 		float wavelength2 =(frameTimeCounter*0.6 + worldpos.x / 11.0 + worldpos.z /  5.0);
 		
-	
 		float frequencywave1 = sin(2 * PI * wavelength1);
 		float frequencywave2 = sin(2 * PI * wavelength2);
 				
@@ -78,13 +74,12 @@ void main() {
 	//			   + 0.05 * sin(2 * PI * (frameTimeCounter*0.6 + worldpos.x / 11.0 + worldpos.z /  5.0));
 		displacement = clamp(wave, -fy, 1.0-fy); //Clamp um nur die wellen zwischen fy und 1-fy zu zeigen die auch sichtbar sind
 		viewpos.y += displacement*0.5;
-#endif
 
 	
-	/* re-rotate */
+	// re-rotate */
 	viewpos = gbufferModelView * viewpos;
 
-	/* projectify */
+	// projectify */
 	gl_Position = gl_ProjectionMatrix * viewpos; //gl_Position ist wichtiger bestantteil von GLSL
 	
 	color = gl_Color;
