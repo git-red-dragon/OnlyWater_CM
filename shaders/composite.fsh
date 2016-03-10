@@ -1,13 +1,5 @@
 #version 120
 
-//------------------------------------
-//ONLY WATER SHADER byMrY
-//http://youtube.com/hdjellybeanlp
-//
-//You can use my code for what ever you want,
-//but don't forget to give credits! :)
-//------------------------------------
-
 uniform sampler2D gcolor;
 uniform sampler2D depthtex0;
 uniform sampler2D gaux1;

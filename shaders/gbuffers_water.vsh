@@ -1,12 +1,5 @@
 #version 120
 
-/*
-!! DO NOT REMOVE !!
-This code is from Chocapic13' shaders
-Read the terms of modification and sharing before changing something below please !
-!! DO NOT REMOVE !!
-*/
-
 //disabling is done by adding "//" to the beginning of a line.
 
 //////////////////////////////ADJUSTABLE VARIABLES
@@ -50,30 +43,31 @@ void main() {
 	
 	//vec4 viewpos = gl_ModelViewMatrix * gl_Vertex;
 	//positionierung das Objets im raum an die richtige stelle
-	vec4 position = gl_ModelViewMatrix * gl_Vertex; 
+	//vec4 position = gl_ModelViewMatrix * gl_Vertex; 
+	vec4 vertexEyeSpace = gl_ModelViewMatrix * gl_Vertex;//verschiebung in den View Eye
 	//iswater = 0.0f;
 	float displacement = 0.0;
 	
 	/* un-rotate */
-	vec4 viewpos = gbufferModelViewInverse * position;
+	vec4 viewpos = gbufferModelViewInverse * vertexEyeSpace; //wieder zurpck setzen  ohne das schwebt das wasser
+
 //viewpos  ist position im viewspase
 	//Translation der Camerapositon
-	vec3 worldpos = viewpos.xyz + cameraPosition;
+	vec3 worldpos = viewpos.xyz; 
 	wpos = worldpos; //ÜBergabe der Worldpos an den fsh
-	
-
-		iswater = 1.0f;
-		float fy = fract(worldpos.y + 0.1);
+	iswater = 1.0f;
+	float fy = fract(worldpos.y + 0.1);
 		
 #ifdef WAVING_WATER
 //					Faktor für die Wellenhöhe
 //		float wave = 0.05 * sin(2 * PI * (frameTimeCounter*0.75 + worldpos.x /  7.0 + worldpos.z / 13.0))   + 0.05 * sin(2 * PI * (frameTimeCounter*0.6 + worldpos.x / 11.0 + worldpos.z /  5.0));
 				
-		float amplitude=0.5;
-		
-		float wavelength1 =(frameTimeCounter*0.75 + worldpos.x /  7.0 + worldpos.z / 13.0);
+		float amplitude=0.1;
+		//Wavelength L relates to frequency w as w = 2p/L.
+		float wavelength1 =(frameTimeCounter*0.75 + worldpos.x /  7.0 + worldpos.z / 13.0); //sorgt dafür das sich die welle bewegt
 		float wavelength2 =(frameTimeCounter*0.6 + worldpos.x / 11.0 + worldpos.z /  5.0);
 		
+	
 		float frequencywave1 = sin(2 * PI * wavelength1);
 		float frequencywave2 = sin(2 * PI * wavelength2);
 				
@@ -95,7 +89,7 @@ void main() {
 	
 	color = gl_Color;
 	
-	texcoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).st; 
+	texcoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).st; //wird bis ins final geschleift
 
 	lmcoord = (gl_TextureMatrix[1] * gl_MultiTexCoord1).st;
 	

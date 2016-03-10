@@ -1,12 +1,5 @@
 #version 120
 
-//------------------------------------
-//ONLY WATER SHADER byMrY
-//http://youtube.com/hdjellybeanlp
-//
-//You can use my code for what ever you want,
-//but don't forget to give credits! :)
-//------------------------------------
 //Add or remove the two "//" in front of "#define" to enable or disable the effect!
 
 //#define DEPTH_OF_FIELD
@@ -52,6 +45,7 @@ float cdist(vec2 coord) {
 }
 
 
+//raytracing für die spiegelung
 vec4 raytrace(vec3 fragpos, vec3 normal){
     vec4 color = vec4(0.0);
     vec3 rvector = normalize(reflect(normalize(fragpos), normalize(normal)));
@@ -87,7 +81,6 @@ vec4 raytrace(vec3 fragpos, vec3 normal){
     return color;
 }
 
-
 //------------MAIN----------------
 
 void main() {
@@ -104,7 +97,7 @@ void main() {
 	}
 
     vec3 fragpos = vec3(texcoord.st, texture2D(depthtex0, texcoord.st).r);
-    fragpos = nvec3(gbufferProjectionInverse * nvec4(fragpos * 2.0 - 1.0));
+    fragpos = nvec3(gbufferProjectionInverse * nvec4(fragpos * 2.0 - 1.0));//ohne fehlt die spiegelung
     vec3 normal = texture2D(gnormal, texcoord.st).rgb * 2.0 - 1.0;
 	color.rgb *= mix(vec3(1.0),vec3(1.0,1.0,1.0),isEyeInWater);
     
@@ -115,7 +108,6 @@ void main() {
 
 		color.rgb = mix(color.rgb, reflection.rgb, fresnel*reflection.a * (vec3(1.0) - color.rgb) * (1.0-isEyeInWater));
     }
-	
 	
 	gl_FragColor = vec4(color.rgb, 0.0);
 }

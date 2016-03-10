@@ -1,10 +1,4 @@
 #version 120
-/*
-!! DO NOT REMOVE !!
-This code is from Chocapic13' shaders
-Read the terms of modification and sharing before changing something below please !
-!! DO NOT REMOVE !!
-*/
 
 /* DRAWBUFFERS:024 */
 
@@ -45,10 +39,6 @@ uniform float rainStrength;
 uniform float frameTimeCounter;
 uniform vec3 cameraPosition;
 
-float rainx = clamp(rainStrength, 0.0f, 1.0f)/1.0f;
-
-vec2 dx = dFdx(texcoord.xy);
-vec2 dy = dFdy(texcoord.xy);
 
 float wave(float n) {
 return sin(2 * PI * (n));
