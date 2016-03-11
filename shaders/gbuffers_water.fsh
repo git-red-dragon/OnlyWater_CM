@@ -8,7 +8,7 @@
 	float RED = 0.0; //Redamount (0 - 255)
 	float GREEN = 100.0; //Greenamount (0 - 255)
 	float BLUE = 200.0; //Blueamount (0 - 255)
-	float OPACITY = 65.0;//65.0; //Opacity (0 - 100)
+	float OPACITY = 100.0;//65.0; //Opacity (0 - 100)
 
 	//#define MIX_TEX	0.7
 	vec4 watercolor = vec4(RED/1000, GREEN/1000, BLUE/1000, OPACITY/100);
@@ -56,8 +56,20 @@ float wavefunction(vec3 worldpos)
 float wave = Amplitude * Speed + Amplitude* Speed2+ Amplitude* Speed3;
 return wave;
 }
+float hash( vec2 p ) {
+	float h = dot(p,vec2(127.1,311.7));	
+    return fract(sin(h)*43758.5453123);
+}
 
-
+float noise( in vec2 p ) {
+    vec2 i = floor( p );
+    vec2 f = fract( p );	
+	vec2 u = f*f*(3.0-2.0*f);
+    return -1.0+2.0*mix( mix( hash( i + vec2(0.0,0.0) ), 
+                     hash( i + vec2(1.0,0.0) ), u.x),
+                mix( hash( i + vec2(0.0,1.0) ), 
+                     hash( i + vec2(1.0,1.0) ), u.x), u.y);
+}
 
 //////////////////////////////VOID MAIN//////////////////////////////
 //////////////////////////////VOID MAIN//////////////////////////////
@@ -97,6 +109,7 @@ void main() {
 			//bump = bump;
 			
 		float bumpmult = 0.05;	
+		//float bumpmult = noise(frag2.xy);
 		//shading Wasser
 		bump = bump * vec3(bumpmult, bumpmult, bumpmult) + vec3(0.0f, 0.0f, 1.0f - bumpmult);
 		//binormal sind die Binormalen des Wassers aus dem Water Vragmentshalder

@@ -37,11 +37,12 @@ const float PI = 3.1415927;//pi
 
 float wavefunction(vec3 worldpos)
 {
- float Amplitude = 0.8;
- float Wavelength = (frameTimeCounter*0.75 + worldpos.x /  7.0 + worldpos.z / 13.0);
- float Wavelength2 = (frameTimeCounter*0.65 + worldpos.x /  6.0 + worldpos.z / 11.0);
- float Wavelength3 = (frameTimeCounter*0.55 + worldpos.x /  5.0 + worldpos.z / 9.0);
- float Wavelength4 = (frameTimeCounter*0.45 + worldpos.x /  4.0 + worldpos.z / 8.0);
+ float Amplitude = 1.8;
+ 
+ float Wavelength = (frameTimeCounter*0.65 + worldpos.x /  10.0 + worldpos.z / 9.0);
+ float Wavelength2 = (frameTimeCounter*0.55 + worldpos.x /  9.0 + worldpos.z / 8.0);
+ float Wavelength3 = (frameTimeCounter*0.45 + worldpos.x /  8.0 + worldpos.z / 7.0);
+ float Wavelength4 = (frameTimeCounter*0.35 + worldpos.x /  7.0 + worldpos.z / 6.0);
 
  float Speed = sin(2 * PI * Wavelength);
  float Speed1 = sin(2 * PI * Wavelength2);
@@ -52,7 +53,6 @@ float wave = Amplitude * Speed + Amplitude* Speed2+ Amplitude* Speed3;
 return wave;
 }
 
-
 void main(){
 	//positionierung das Objets im raum an die richtige stelle
 	vec4 vertexEyeSpace = gl_ModelViewMatrix * gl_Vertex;//verschiebung in den View Eye
@@ -61,19 +61,15 @@ void main(){
 	// un-rotate */
 	vec4 viewpos = gbufferModelViewInverse * vertexEyeSpace; //wieder zurpck setzen  ohne das schwebt das wasser
 
-//viewpos  ist position im viewspase
+    //viewpos  ist position im viewspase
 	vec3 worldpos = viewpos.xyz; 
 	wpos = worldpos; //ÜBergabe der Worldpos an den fsh
 	iswater = 1.0f;
 	float fy = fract(worldpos.y + 0.1);
- 
- 
-	
 	float wave = wavefunction(worldpos);
 
 	displacement = clamp(wave, -fy, 1.0-fy); //Clamp um nur die wellen zwischen fy und 1-fy zu zeigen die auch sichtbar sind
-		viewpos.y += displacement*0.5;
-
+	viewpos.y += displacement*0.5;
 	
 	// re-rotate */
 	viewpos = gbufferModelView * viewpos;
@@ -129,7 +125,7 @@ void main(){
 		tangent  = normalize(gl_NormalMatrix * vec3(-1.0,  0.0,  0.0));
 		binormal = normalize(gl_NormalMatrix * vec3( 0.0, -1.0,  0.0));
 	}	
-	
+	//Ende Normalisieren
 }
 
 

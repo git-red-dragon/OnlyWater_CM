@@ -125,16 +125,7 @@ void main() {
 
 		vec3 refracted = vec3(0.0f);
 		float refractedmask = 0.0;
-		float bigWaveRefract = 0.0;
-		float bigWaveRefractScale = 0.0;
-	
-		vec2 bigRefract = vec2(wnormal_x*bigWaveRefract, wnormal_y*bigWaveRefract);
-	
-		vec2 refractcoord_r = texcoord.st;
-		vec2 refractcoord_g = texcoord.st;
-		vec2 refractcoord_b = texcoord.st;
-	
-		
+
 		color.rgb = mix(color.rgb, refracted.rgb, vec3(refractedmask));	
 		
 	}
