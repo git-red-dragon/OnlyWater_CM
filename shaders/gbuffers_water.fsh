@@ -40,31 +40,24 @@ uniform float frameTimeCounter;
 uniform vec3 cameraPosition;
 
 
-float wave(float n) {
-return sin(2 * PI * (n));
+float wavefunction(vec3 worldpos)
+{
+ float Amplitude = 0.8;
+ float Wavelength = (frameTimeCounter*0.75 + worldpos.x /  7.0 + worldpos.z / 13.0);
+ float Wavelength2 = (frameTimeCounter*0.65 + worldpos.x /  6.0 + worldpos.z / 11.0);
+ float Wavelength3 = (frameTimeCounter*0.55 + worldpos.x /  5.0 + worldpos.z / 9.0);
+ float Wavelength4 = (frameTimeCounter*0.45 + worldpos.x /  4.0 + worldpos.z / 8.0);
+
+ float Speed = sin(2 * PI * Wavelength);
+ float Speed1 = sin(2 * PI * Wavelength2);
+ float Speed2 = sin(2 * PI * Wavelength3);
+ float Speed3 = sin(2 * PI * Wavelength4);
+ 
+float wave = Amplitude * Speed + Amplitude* Speed2+ Amplitude* Speed3;
+return wave;
 }
 
-float rand(vec2 co){
-    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
-}
 
-
-
-
-float noiseW(vec3 pos) {
-	vec3 coord = fract(pos / 1000);
-
-	float noise = texture2D(noisetex,coord.xz*0.5 + frameTimeCounter*0.0010).x/0.5;
-	noise -= texture2D(noisetex,coord.xz*0.5 - frameTimeCounter*0.0010).x/0.5;	
-	noise += texture2D(noisetex,coord.xz*2.0 + frameTimeCounter*0.0015).x/2.0;
-	noise -= texture2D(noisetex,coord.xz*2.0 - frameTimeCounter*0.0015).x/2.0;	
-	noise += texture2D(noisetex,coord.xz*3.5 + frameTimeCounter*0.0020).x/3.5;
-	noise -= texture2D(noisetex,coord.xz*3.5 - frameTimeCounter*0.0020).x/3.5;	
-	noise += texture2D(noisetex,coord.xz*5.0 + frameTimeCounter*0.0025).x/5.0;	
-	noise -= texture2D(noisetex,coord.xz*5.0 - frameTimeCounter*0.0025).x/5.0;		
-
-	return noise;
-}
 
 //////////////////////////////VOID MAIN//////////////////////////////
 //////////////////////////////VOID MAIN//////////////////////////////
@@ -84,11 +77,11 @@ void main() {
 	waterpos.x -= (waterpos.x-frameTimeCounter*0.15)*7.0;
 	waterpos.z -= (waterpos.z-frameTimeCounter*0.15)*7.0;
 		float deltaPos = 0.4;
-	float h0 = noiseW(waterpos);
-	float h1 = noiseW(waterpos + vec3(deltaPos,0.0,0.0));
-	float h2 = noiseW(waterpos + vec3(-deltaPos,0.0,0.0));
-	float h3 = noiseW(waterpos + vec3(0.0,0.0,deltaPos));
-	float h4 = noiseW(waterpos + vec3(0.0,0.0,-deltaPos));
+	float h0 = wavefunction(waterpos);
+	float h1 = wavefunction(waterpos + vec3(deltaPos,0.0,0.0));
+	float h2 = wavefunction(waterpos + vec3(-deltaPos,0.0,0.0));
+	float h3 = wavefunction(waterpos + vec3(0.0,0.0,deltaPos));
+	float h4 = wavefunction(waterpos + vec3(0.0,0.0,-deltaPos));
 	
 	float xDelta = ((h1-h0)+(h0-h2))/deltaPos;
 	float yDelta = ((h3-h0)+(h0-h4))/deltaPos;
@@ -111,6 +104,7 @@ void main() {
 							  tangent.y, binormal.y, normal.y,
 							  tangent.z, binormal.z, normal.z);
 		
+
 		frag2 = vec4(normalize(bump * tbnMatrix) * 0.5 + 0.5, 1.0);
  
 		//vec3 noise =vec3(noise(normal.xy),noise(normal.xy),noise(normal.xy));
