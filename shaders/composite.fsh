@@ -57,7 +57,7 @@ float callwaves(vec2 pos) {
 	float rs2b = abs(sin((worldTime*wspeed3/6.0) + (pos.t*wsize3) * 47.0 - cos(pos.s*wsize3) * 33.0 + rs0a + rs0b));
 	float rs3b = abs(sin((worldTime*wspeed3/14.0) - (pos.s*wsize3) * 13.0 + sin(pos.t*wsize3) * 98.0 + rs0 + rs1));
 
-	float waves = (rs1 * rs0 + rs2 * rs3)/2.0f;
+	float waves  = (rs1 * rs0 + rs2 * rs3)/2.0f;
 	float waves2 = (rs0a * rs1a + rs2a * rs3a)/2.0f;
 	float waves3 = (rs0b + rs1b + rs2b + rs3b)*0.25;
 
@@ -122,11 +122,6 @@ void main() {
 		//Calculate distance of objects behind water
 		float refractdist = 0.2 * 10.0f;
 
-		//Perform refraction
-		float refractamount = 500.1154f*0.35f*refractdist;
-		float refractamount2 = 0.0214f*0.05f*refractdist;
-		float refractamount3 = 0.214f*0.15f*refractdist;
-		float waberration = 0.105;
 
 		vec3 refracted = vec3(0.0f);
 		float refractedmask = 0.0;
